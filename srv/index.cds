@@ -1,6 +1,5 @@
 using from './cat-service';
 annotate CatalogService.Products with @odata.draft.enabled;
-
 annotate CatalogService.Orders with @ (
  UI: {
  Identification: [{Value: deliveryDate}],
