@@ -12,7 +12,6 @@ annotate CatalogService.Orders with @ (
      { $Type : 'UI.DataField', Value: netAmount, ![@UI.Importance]: #High },
      { $Type : 'UI.DataField', Value: grossAmount, ![@UI.Importance]: #High },
      { $Type : 'UI.DataField', Value: taxAmount, ![@UI.Importance]: #High },
-     { $Type : 'UI.DataField', Value: currency, ![@UI.Importance]: #High }
  ],
  HeaderInfo : { TypeName: 'Order', TypeNamePlural: 'Orders', Title: {Value : deliveryDate},},
  HeaderFacets : [
@@ -31,7 +30,7 @@ annotate CatalogService.Orders with @ (
         {   $Type : 'UI.DataField', Value : netAmount, ![@UI.Importance] : #Medium },
         {   $Type : 'UI.DataField', Value : grossAmount, ![@UI.Importance] : #Medium },
         {   $Type : 'UI.DataField', Value : taxAmount, ![@UI.Importance] : #Medium },
-        {   $Type : 'UI.DataField', Value: currency, ![@UI.Importance]: #High }]},
+        ]},
         FieldGroup #AdministrativeData : {Data : [
         {  $Type : 'UI.DataField', Value : createdBy },
         {  $Type : 'UI.DataField', Value : createdAt },
@@ -64,27 +63,26 @@ annotate CatalogService.Markets with @ (
  Identification: [{Value: toMarketInfos.name }],
  SelectionFields: [toMarketInfos.name],
  LineItem: [
-     { $Type : 'UI.DataField', Value: toMarketInfos.name, ![@UI.Importance]: #High },
+     { $Type : 'UI.DataField', Value : toMarketInfos.imageURL, ![@UI.Importance]: #High },
+     { $Type : 'UI.DataField', Value: toMarketInfos_ID, ![@UI.Importance]: #High },
      { $Type : 'UI.DataField', Value: startDate, ![@UI.Importance]: #High },  
      { $Type : 'UI.DataField', Value: endDate, ![@UI.Importance]: #High },
      { $Type : 'UI.DataField', Value: totalNetAmount, ![@UI.Importance]: #High },
      { $Type : 'UI.DataField', Value: totalGrossAmount, ![@UI.Importance]: #High },
-     { $Type : 'UI.DataField', Value: totalTaxAmount, ![@UI.Importance]: #High },
-     { $Type : 'UI.DataField', Value: currency, ![@UI.Importance]: #High }   
+     { $Type : 'UI.DataField', Value: totalTaxAmount, ![@UI.Importance]: #High }  
  ],
- HeaderInfo : { TypeName: 'Market', TypeNamePlural : 'Markets', Title : {Value : toMarketInfos.name}},
+ HeaderInfo : { TypeName: 'Market', TypeNamePlural : 'Markets', Title : {Value : toMarketInfos.name} },
  HeaderFacets : [{ $Type: 'UI.ReferenceFacet', Target: '@UI.FieldGroup#Description', ![@UI.Importance] : #Medium }],
         FieldGroup #Description        : {Data : [
-        {   $Type : 'UI.DataField', Value : toMarketInfos.name 
-        }
+        {   $Type : 'UI.DataField', Value : toMarketInfos_ID },
+        {   $Type : 'UI.DataField', Value : toMarketInfos.imageURL },
         ]},
         FieldGroup #Details : {Data : [
         {   $Type : 'UI.DataField', Value : startDate },
         {   $Type : 'UI.DataField', Value : endDate, ![@UI.Importance] : #Medium },
         {   $Type : 'UI.DataField', Value : totalNetAmount, ![@UI.Importance] : #Medium },
         {   $Type : 'UI.DataField', Value : totalGrossAmount, ![@UI.Importance] : #Medium },
-        {   $Type : 'UI.DataField', Value : totalTaxAmount, ![@UI.Importance] : #Medium },
-        {   $Type : 'UI.DataField', Value: currency, ![@UI.Importance]: #High }
+        {   $Type : 'UI.DataField', Value : totalTaxAmount, ![@UI.Importance] : #Medium }
         ]}
     },
      UI.Facets : [
@@ -119,28 +117,28 @@ annotate CatalogService.Markets with @ (
 
 annotate CatalogService.Products with @(
     UI: {
- SelectionFields: [title],
+ SelectionFields: [productgroup_ID],
  Identification  : [  
      { $Type: 'UI.DataFieldForAction', Action: 'CatalogService.start', Label: 'Start'},
      { $Type: 'UI.DataFieldForAction', Action: 'CatalogService.close', Label: 'Close' },
-     {Value: title}],
+     //{Value: productgroup.name}
+     ],
  LineItem: [
      { $Type: 'UI.DataFieldForAction', Action: 'CatalogService.start', Label: 'Start'},
      { $Type: 'UI.DataFieldForAction', Action: 'CatalogService.close', Label: 'Close' },
-     { $Type : 'UI.DataField', Value: title, ![@UI.Importance]: #High },   
+     { $Type : 'UI.DataField', Value : productgroup.imageURL, ![@UI.Importance]: #High },
+     { $Type : 'UI.DataField', Value: productgroup_ID, ![@UI.Importance]: #High },   
      { $Type : 'UI.DataField', Value: model, ![@UI.Importance]: #High },
-     { $Type : 'UI.DataField', Value: status, ![@UI.Importance]: #High },
+     { $Type : 'UI.DataField', Value: status_ID, Criticality: status.criticality, ![@UI.Importance]: #High },
      { $Type : 'UI.DataField', Value: price, ![@UI.Importance]: #High },
-     { $Type : 'UI.DataField', Value: currency, ![@UI.Importance]: #High },
      { $Type : 'UI.DataField', Value: taxrate, ![@UI.Importance]: #High },
-     { $Type : 'UI.DataField', Value: height, ![@UI.Importance]: #High },
-     { $Type : 'UI.DataField', Value: width, ![@UI.Importance]: #High },
-     { $Type : 'UI.DataField', Value: depth, ![@UI.Importance]: #High },
-     { $Type : 'UI.DataField', Value: sizeuom_msehi, ![@UI.Importance]: #High }
-     
+     //{ $Type : 'UI.DataField', Value: height, ![@UI.Importance]: #High },
+     //{ $Type : 'UI.DataField', Value: width, ![@UI.Importance]: #High },
+     //{ $Type : 'UI.DataField', Value: depth, ![@UI.Importance]: #High } 
  ],
  PresentationVariant : {SortOrder : [
-        {   $Type      : 'Common.SortOrderType', Property   : title, Descending : false },
+      
+        {   $Type      : 'Common.SortOrderType', Property   : productgroup.name, Descending : false },
         {   $Type      : 'Common.SortOrderType', Property   : model, Descending : false }
         ]},
     },
@@ -148,37 +146,34 @@ annotate CatalogService.Products with @(
         HeaderInfo : {
             TypeName       : 'Product',
             TypeNamePlural : 'Products',
-            Title          : {Value : title},
+            //Title          : {Value : productgroup_ID},
         },
         HeaderFacets : [
         {
             $Type             : 'UI.ReferenceFacet',
             Target            : '@UI.FieldGroup#Description',
             ![@UI.Importance] : #Medium
-        },
-        {
-            $Type             : 'UI.ReferenceFacet',
-            Target            : '@UI.FieldGroup#Description2',
-            ![@UI.Importance] : #Medium
-        }
-        ],
+        }],
         FieldGroup #Description        : {Data : [
+        {   $Type : 'UI.DataField', Value : productgroup_ID },    
+        {   $Type : 'UI.DataField', Value : productgroup.imageURL },
         {   $Type : 'UI.DataField', Value : model },
-        {   $Type : 'UI.DataField', Value : status },
+         ]},
+         FieldGroup #Details : {Data : [
+        //{   $Type : 'UI.DataField', Value : productgroup_ID, ![@UI.Importance] : #Medium },
+        //{   $Type : 'UI.DataField', Value : model, ![@UI.Importance] : #Medium },
+        {   $Type : 'UI.DataField', Value : price},
+        {   $Type : 'UI.DataField', Value : currency.code, ![@UI.Importance]: #High },
+        {   $Type : 'UI.DataField', Value : taxrate }
         ]},
-    FieldGroup #Description2        : {Data : [
+        FieldGroup #Details2 : {Data : [
+        {   $Type : 'UI.DataField', Value : status_ID, Criticality: status.criticality },
+        ]},
+        FieldGroup #Details3 : {Data : [
         {   $Type : 'UI.DataField', Value : depth },
         {   $Type : 'UI.DataField', Value : width },
         {   $Type : 'UI.DataField', Value : height },
-        {   $Type : 'UI.DataField', Value : sizeuom_msehi},
-        ]},
-    FieldGroup #Details : {Data : [
-        {   $Type : 'UI.DataField', Value : title },
-        {   $Type : 'UI.DataField', Value : model, ![@UI.Importance] : #Medium },
-        {   $Type : 'UI.DataField', Value : productgroup.name, ![@UI.Importance] : #Medium },
-        {   $Type : 'UI.DataField', Value : price   },
-        {   $Type : 'UI.DataField', Value : currency, ![@UI.Importance]: #High },
-        {   $Type : 'UI.DataField', Value : taxrate }
+        {   $Type : 'UI.DataField', Value : sizeuom_msehi }
         ]},
         FieldGroup #AdministrativeData : {Data : [
         {  $Type : 'UI.DataField',  Value : createdBy },
@@ -194,9 +189,19 @@ annotate CatalogService.Products with @(
         Label  : '{i18n>Product Info}',
         Facets : [{
             $Type  : 'UI.ReferenceFacet',
-            Label  : '{i18n>Product Info}',
+            Label  : '{i18n>Price Info}',
             Target : '@UI.FieldGroup#Details'
-        }
+        },
+        {
+            $Type  : 'UI.ReferenceFacet',
+            Label  : '{i18n>Production Info}',
+            Target : '@UI.FieldGroup#Details2'
+        },
+         {
+            $Type  : 'UI.ReferenceFacet',
+            Label  : '{i18n>Dimentions Info}',
+            Target : '@UI.FieldGroup#Details3'
+        },
         ]
     },
       {
@@ -223,22 +228,22 @@ annotate CatalogService.Products with {
     ID @title: 'ID';
     title @title: 'Title';
     model @title: 'Model';
-    price @title: 'Price';
+    price @title: 'Price' @Measures.ISOCurrency: currency_code;
     taxrate @title: 'Tax Rate';
     status @title: 'Status';
-    height @title: 'Height';
-    width @title: 'Width';
-    depth @title: 'Depth';
+    height @title: 'Height' @Measures.Unit : sizeuom_msehi;
+    width @title: 'Width' @Measures.Unit : sizeuom_msehi;
+    depth @title: 'Depth' @Measures.Unit : sizeuom_msehi;
     currency_code @title: 'Currency';
-    productgroup @title: 'Product Group';
+    productgroup @title: 'Product';
 };
 
 annotate CatalogService.Markets with {
     startDate @title: 'Starting Date';
     endDate @title: 'Ending Date';
-    totalNetAmount @title: 'Total Net Amount';
-    totalGrossAmount @title: 'Total Gross Amount';
-    totalTaxAmount @title: 'Total Tax Amount';
+    totalNetAmount @title: 'Total Net Amount' @Measures.ISOCurrency: currency_code;
+    totalGrossAmount @title: 'Total Gross Amount' @Measures.ISOCurrency: currency_code;
+    totalTaxAmount @title: 'Total Tax Amount' @Measures.ISOCurrency: currency_code;
     currency_code @title: 'Currency';
     toMarketInfos @title: 'Market name'
 };
@@ -247,8 +252,8 @@ annotate CatalogService.Orders with {
     deliveryDate @title: 'Delivery Date';
     calendarYear @title: 'Year';
     quantity @title : 'Quantity';
-    netAmount @title: 'Order Net Amount';
-    grossAmount @title: 'Order Gross Amount';
-    taxAmount @title: 'Order Tax Amount';
+    netAmount @title: 'Order Net Amount' @Measures.ISOCurrency: currency_code;
+    grossAmount @title: 'Order Gross Amount' @Measures.ISOCurrency: currency_code;
+    taxAmount @title: 'Order Tax Amount' @Measures.ISOCurrency: currency_code;
     currency_code @title: 'Currency';
 };

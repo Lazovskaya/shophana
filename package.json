@@ -62,7 +62,7 @@
         "requires": {
             "db": {
                 "kind": "hana"
-            }
+            }              
         }
     }
 }

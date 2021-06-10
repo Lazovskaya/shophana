@@ -2,14 +2,14 @@ namespace shophana;
 using { cuid, managed, Currency, sap } from '@sap/cds/common';
 
 context teched.shop {
-entity Products: managed {
-  key ID        : UUID;
+entity Products: managed, cuid, teched.common.PriceCurrency {
   model         : String(15);
   title         : String(200);
-  status        : teched.common.StatusType default 'P';
+  status        : Association to one Statuses;
   price         : teched.common.CurrencyType;
   taxrate       : teched.common.CurrencyType;
-  currency      : teched.common.CurrencyType;
+  //currencyCode  : teched.common.CurrencyType;
+  currency      : Currency;
   height        : Decimal(13, 3);
   depth         : Decimal(13, 3);
   width         : Decimal(13, 3);
@@ -29,7 +29,7 @@ entity Markets: managed, cuid {
       totalNetAmount   : teched.common.CurrencyType;
       totalGrossAmount : teched.common.CurrencyType;
       totalTaxAmount   : teched.common.CurrencyType;
-      currency         : teched.common.CurrencyType;
+      currency         : Currency;
       @cascade : {all}
       order   : Composition of many Orders on order.toMarket = $self;
 }
@@ -42,46 +42,60 @@ entity Orders: managed, cuid {
     netAmount        : teched.common.CurrencyType;
     grossAmount      : teched.common.CurrencyType;
     taxAmount        : teched.common.CurrencyType;
-    currency         : teched.common.CurrencyType;
+    currency         : Currency;
 }
 
-entity UOM : sap.common.CodeList {
+@cds.odata.valuelist
+@cds.autoexpose entity UOM : sap.common.CodeList {
     key msehi      : String(3);
         dimid      : String(6);
         isocode    : String(3);
 }
 
-entity ProductGroups {
+@cds.odata.valuelist
+@cds.autoexpose entity ProductGroups : sap.common.CodeList {
     key ID     : Integer;
-    name       : String(50);
-    imageURL   : String;    
+    name       : String(20);
+    imageURL   : String @UI.IsImageURL;
+    imageType  : String @Core.IsMediaType; 
 }
 
-entity MarketInfos : sap.common.CodeList {
+@cds.odata.valuelist
+@cds.autoexpose entity Statuses : sap.common.CodeList {
+    key ID     : Integer;
+    name       : String(20);
+    criticality: Integer;
+}
+
+@cds.odata.valuelist
+@cds.autoexpose entity MarketInfos : sap.common.CodeList {
     key ID     : Integer;
     name       : String(50);
     code       : String(2);
-    imageURL   : String;  
-}
+    imageURL   : String @UI.IsImageURL;
+    imageType  : String @Core.IsMediaType; 
 }
 
-    extend sap.common.Currencies with {
+}
+
+extend sap.common.Currencies with {
     numcode  : Integer;
     exponent : Integer; //> e.g. 2 --> 1 Dollar = 10^2 Cent
     minor    : String; //> e.g. 'Cent'
 }
 
 context teched.common{
+
 type BusinessKey : String(10);
 
  @assert.range : true
-    type StatusType : String(1) enum {
-        Planning    = 'P';
-        Development = 'D';
-        Production  = 'R';
-        Out         = 'O';
-        Confirmed   = 'C';
-        Unconfirmed = 'U';
+    type StatusType : Integer enum {
+        Planning = 1;
+        Development = 2;
+        Production = 3;
+        Out = 4;
+        Confirmed = 5;
+        Unconfirmed = 6;
     }
 
     type CurrencyType : Decimal(15, 2)@(
@@ -95,7 +109,7 @@ type BusinessKey : String(10);
     );
 
     aspect PriceCurrency {
-        currency    : Currency;
+        currency: Currency;
         price : CurrencyType;
         taxrate   : CurrencyType;
         grossAmount : CurrencyType;
@@ -110,6 +124,17 @@ type BusinessKey : String(10);
         netAmount @(title : 'Net amount');
         taxAmount @(title : 'Tax amount');
     }
+
+  aspect MyCodeList @(
+    cds.autoexpose,
+    cds.persistence.skip : 'if-unused'
+  ) {
+    ID  : localized String(255)  @title : '{i18n>ID}';
+    Title : localized String(1000) @title : '{i18n>Title}';
+  }
+
+annotate shophana.MyCodeList with @UI.Identification : [{Value:ID}];
+annotate SHOPHANA.MyCodeList with @cds.odata.valuelist;
 }  
 
 
