@@ -121,7 +121,7 @@ annotate CatalogService.Products with @(
  Identification  : [  
      { $Type: 'UI.DataFieldForAction', Action: 'CatalogService.start', Label: 'Start'},
      { $Type: 'UI.DataFieldForAction', Action: 'CatalogService.close', Label: 'Close' },
-     //{Value: productgroup.name}
+     {Value: productgroup.name}
      ],
  LineItem: [
      { $Type: 'UI.DataFieldForAction', Action: 'CatalogService.start', Label: 'Start'},
@@ -146,7 +146,7 @@ annotate CatalogService.Products with @(
         HeaderInfo : {
             TypeName       : 'Product',
             TypeNamePlural : 'Products',
-            //Title          : {Value : productgroup_ID},
+            Title          : {Value : productgroup_ID},
         },
         HeaderFacets : [
         {
